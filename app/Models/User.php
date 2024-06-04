@@ -13,6 +13,8 @@ class User extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['username', 'full_name'];
 
+    public $timestamps = false;
+
     public function posts()
     {
         return $this->hasMany(Post::class);
