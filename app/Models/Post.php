@@ -31,4 +31,11 @@ class Post extends Model
     {
         return $this->belongsToMany(Category::class, 'category_post');
     }
+
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 }

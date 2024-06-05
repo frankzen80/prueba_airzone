@@ -24,4 +24,10 @@ class User extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function userCategories()
+    {
+        return $this->belongsToMany(Category::class, 'category_user');
+    }
+
 }
