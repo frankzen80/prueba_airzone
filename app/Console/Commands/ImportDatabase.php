@@ -18,16 +18,32 @@ class ImportDatabase extends Command
 
     public function handle()
     {
-        $file = $this->argument('file');
+        try {
+            
+            // Obtener el argumento 'file' proporcionado al comando, que representa la ruta del archivo SQL.
+            $file = $this->argument('file');
 
-        if (!File::exists($file)) {
-            $this->error('File does not exist.');
-            return;
-        }
+            // Verificar si el archivo especificado existe en el sistema de archivos.
+            if (!File::exists($file)) {
+                // Mostrar un mensaje de error si el archivo no existe y terminar el proceso.
+                $this->error('El fichero no existe');
+                return;
+            }
 
-        $sql = File::get($file);
-        DB::unprepared($sql);
+            // Leer el contenido del archivo SQL.
+            $sql = File::get($file);
+            
+            // Ejecutar las declaraciones SQL contenidas en el archivo sin preparación previa.
+            // Esto es útil para ejecutar múltiples declaraciones SQL a la vez.
+            DB::unprepared($sql);
 
-        $this->info('Database imported successfully.');
+            // Mostrar un mensaje de éxito si la importación de la base de datos fue exitosa.
+            $this->info('Database imported successfully.');
+          
+        } catch (\Exception $e) {
+            
+                // Capturar cualquier excepción que ocurra durante el proceso y mostrar el mensaje de error.
+                $this->info($e->getMessage());
+        }   
     }
 }
