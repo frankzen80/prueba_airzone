@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class User extends Model
 {
     // Usa el trait HasFactory para permitir la creación de instancias del modelo utilizando Factory.

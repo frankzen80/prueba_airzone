@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 
 class Category extends Model
 {
      // Usa el trait HasFactory para permitir la creación de instancias del modelo utilizando Factory.
     use HasFactory;
+    use HasApiTokens;
 
     protected $table = 'categories';
     protected $primaryKey = 'id';
@@ -20,6 +23,13 @@ class Category extends Model
         'slug' => 'required|string|max:255|unique:categories,slug',
         'visible' => 'required|boolean',
     ];
+
+
+    public static function rules()
+    {
+        return (new self())->rules;
+    }
+
 
     /**
      * Relación (1:N): Indica que una categoría puede estar asociada con muchas publicaciones.

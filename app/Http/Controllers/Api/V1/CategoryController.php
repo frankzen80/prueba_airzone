@@ -22,7 +22,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate(Category::$rules);
+        $validatedData = $request->validate(Category::rules());
         $validatedData['slug'] = Str::slug($validatedData['name']);
 
         $category = Category::create($validatedData);
@@ -43,7 +43,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $validatedData = $request->validate(Category::$rules);
+        $validatedData = $request->validate(Category::rules());
         $validatedData['slug'] = Str::slug($validatedData['name']);
 
         $category->update($validatedData);
