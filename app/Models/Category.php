@@ -14,6 +14,13 @@ class Category extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['name', 'slug', 'visible'];
 
+    //  Las reglas de validación para el modelo Category.
+    protected $rules = [
+        'name' => 'required|string|max:255',
+        'slug' => 'required|string|max:255|unique:categories,slug',
+        'visible' => 'required|boolean',
+    ];
+
     /**
      * Relación (1:N): Indica que una categoría puede estar asociada con muchas publicaciones.
      * Utiliza la tabla intermedia 'category_post' para definir la relación.
