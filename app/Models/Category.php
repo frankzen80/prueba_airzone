@@ -13,6 +13,8 @@ class Category extends Model
     use HasFactory;
     use HasApiTokens;
 
+    public $timestamps = false;
+    
     protected $table = 'categories';
     protected $primaryKey = 'id';
     protected $fillable = ['name', 'slug', 'visible'];
