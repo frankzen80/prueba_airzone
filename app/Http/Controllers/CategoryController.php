@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use Exception;
 
 class CategoryController extends Controller
 {
@@ -13,8 +17,16 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return response()->json($categories);
+        try {
+
+            $categories = Category::all();
+            return response()->json($categories);
+
+        } catch (Exception $e) {
+
+            return response()->json(['error' => 'Se produjo un error'], 500);
+        }
+
     }
 
     /**
@@ -22,12 +34,24 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate(Category::rules());
-        $validatedData['slug'] = Str::slug($validatedData['name']);
+        try {
 
-        $category = Category::create($validatedData);
+            $validatedData = $request->validate(Category::rules());
+            $validatedData['slug'] = Str::slug($validatedData['name']);
 
-        return response()->json($category, 201);
+            $category = Category::create($validatedData);
+
+            return response()->json($category, 201, [], JSON_PRETTY_PRINT);
+
+        } catch (ValidationException $e) {
+
+            return response()->json(['error' => 'Error al intentar actualizar datos', 'messages' => $e->errors()], 422);
+
+        } catch (Exception $e) {
+
+            return response()->json(['error' => 'Se produjo un error'], 500);
+
+        }
     }
 
     /**
@@ -35,7 +59,19 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return response()->json($category);
+        try {
+
+            return response()->json($category);
+
+         } catch (ModelNotFoundException $e) {
+
+            return response()->json(['error' => 'Categoría no encontrada'], 404);
+
+        } catch (\Exception $e) {
+
+            return response()->json(['error' => 'Se produjo un error'], 500);
+            
+        }
     }
 
     /**
@@ -43,12 +79,24 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $validatedData = $request->validate(Category::rules());
-        $validatedData['slug'] = Str::slug($validatedData['name']);
+        try {
 
-        $category->update($validatedData);
+            $validatedData = $request->validate(Category::rules());
+            $validatedData['slug'] = Str::slug($validatedData['name']);
 
-        return response()->json($category);
+            $category->update($validatedData);
+
+            return response()->json($category);
+
+        } catch (ValidationException $e) {
+
+            return response()->json(['error' => 'Error al actualizar', 'messages' => $e->errors()], 422);
+
+        } catch (Exception $e) {
+
+            return response()->json(['error' => 'Se produjo un error'], 500);
+
+        }
     }
 
     /**
@@ -56,8 +104,15 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->delete();
+        try {
 
-        return response()->json(null, 204);
+            $category->delete();
+            return response()->json(null, 204);
+
+        } catch (Exception $e) {
+
+            return response()->json(['error' => 'Se produjo un error al intentar eliminar un registro'], 500);
+
+        }
     }
 }

@@ -21,8 +21,8 @@ class Category extends Model
 
     //  Las reglas de validación para el modelo Category.
     protected $rules = [
-        'name' => 'required|string|max:255',
-        'slug' => 'required|string|max:255|unique:categories,slug',
+        'name' => 'required|string|max:128',
+        'slug' => 'required|string|max:128|unique:categories,slug',
         'visible' => 'required|boolean',
     ];
 
