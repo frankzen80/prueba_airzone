@@ -52,9 +52,12 @@ Puntualizar que he realizado los siguientes cambios en la base de datos antes de
 ```
     php artisan db:seed
 ```
+5. Y arrancamos la aplicación:
+```
+    php artisan serve
+```
 
-
-4. API-CRUD para categorias
+6. API-CRUD para categorias
 
 * Listar todo
 ```
