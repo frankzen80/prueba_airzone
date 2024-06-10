@@ -26,7 +26,6 @@ class Category extends Model
         'visible' => 'required|boolean',
     ];
 
-
     public static function rules()
     {
         return (new self())->rules;

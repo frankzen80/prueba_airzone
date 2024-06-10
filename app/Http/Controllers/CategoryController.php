@@ -86,7 +86,7 @@ class CategoryController extends Controller
 
             $category->update($validatedData);
 
-            return response()->json($category);
+            return response()->json(['success' => 'Registro ' . $category->id . ' actualizado correctamente']);
 
         } catch (ValidationException $e) {
 
@@ -107,7 +107,7 @@ class CategoryController extends Controller
         try {
 
             $category->delete();
-            return response()->json(null, 204);
+            return response()->json(['success' => 'Registro '.$category->id.' eliminado'], 204);
 
         } catch (Exception $e) {
 

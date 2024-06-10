@@ -121,7 +121,7 @@ CREATE TABLE `posts` (
   `picture` varchar(128) DEFAULT NULL,
   `short_content` text NOT NULL,
   `content` longtext DEFAULT NULL,
-  `added` datetime NOT NULL,
+  `added` datetime DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `comment` tinyint(4) NOT NULL DEFAULT 0,
   `pending` tinyint(4) NOT NULL DEFAULT 0,
