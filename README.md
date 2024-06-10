@@ -44,10 +44,6 @@ Ponemos la application key y configuramos la base de datos en el fichero .env:
     php artisan db:import documents/prueba_tecnica_2024-02-13.sql
 ```
 
-Puntualizar que he realizado los siguientes cambios en la base de datos antes de importarla:
-* Por la versión de MariaDB que tengo instalar me obligaba a que algunos campos requerían tener un valor definido por defecto, a lo que he predefinido valor NULL.
-* Para evitar posibles conflitctos con tablas que pudieran existir he añadido *** IF EXISTS *** en el comando "CREATE TABLE ...".
-
 3. Ejecutamos Factories y Seeders
 ```
     php artisan db:seed
