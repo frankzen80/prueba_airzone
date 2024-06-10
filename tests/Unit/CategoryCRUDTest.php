@@ -65,6 +65,39 @@ class CategoryCRUDTest extends TestCase
         $this->assertEquals(201, $response->status());
     }
 
+    
+    /**
+     * Prueba para el método store que no permite insertar datos duplicados en name y slug.
+     */
+    public function testStoreWithDuplicateData()
+    {
+        // Creamos una categoría existente
+        $existingCategory = Category::factory()->create([
+            'name' => 'Categoría Existente',
+            'slug' => 'categoria-existente',
+        ]);
+
+        // Datos para la nueva categoría (con nombre y slug duplicados)
+        $data = [
+            'name' => 'Categoría Existente',
+            'description' => 'Descripción de la categoría de prueba',
+        ];
+
+        $request = new Request($data);
+
+        // Simulamos que la validación falla debido a datos duplicados
+        $requestMock = Mockery::mock(Request::class);
+        $requestMock->shouldReceive('validate')
+            ->andThrow(
+                ValidationException::withMessages(['name' => ['El nombre ya existe.']])
+            );
+
+        $controller = new CategoryController();
+        $response = $controller->store($requestMock);
+
+        $this->assertEquals(422, $response->status());
+        $this->assertEquals(['error' => 'Error al intentar actualizar datos', 'messages' => ['name' => ['El nombre ya existe.']]], $response->getData(true));
+    }
 
     /**
      * Prueba para el método show que muestra una categoría específica.
@@ -103,19 +136,57 @@ class CategoryCRUDTest extends TestCase
         // Creamos una instancia de Request con los nuevos datos
         $request = new Request($data);
 
-        // Simulamos que el método $category->update() devuelve true
-        $categoryMock = Mockery::mock(Category::class);
-        $categoryMock->shouldReceive('update')->andReturn($category);
+        // Simulamos que la validación de los datos pasa correctamente
+        $requestMock = Mockery::mock(Request::class);
+        $requestMock->shouldReceive('validate')
+            ->andReturn($data);
 
         // Creamos una instancia del controlador
         $controller = new CategoryController();
 
         // Llamamos al método update y obtenemos la respuesta
-        $response = $controller->update($request, $category);
+        $response = $controller->update($requestMock, $category);
 
         // Verificamos que la respuesta tenga un código de estado 200 (OK)
         $this->assertEquals(200, $response->status());
+    }
 
+    /**
+     * Prueba para el método update que no permite insertar datos duplicados en name y slug.
+     */
+    public function testUpdateWithDuplicateData()
+    {
+        // Creamos una categoría existente
+        $existingCategory = Category::factory()->create([
+            'name' => 'Categoría Existente',
+            'slug' => 'categoria-existente',
+        ]);
+
+        // Creamos una categoría ficticia con los mismos datos que la categoría existente
+        $category = Category::factory()->make([
+            'name' => 'Categoría a Actualizar',
+            'slug' => 'categoria-a-actualizar',
+        ]);
+
+        $data = [
+            'name' => 'Categoría Existente',
+            'description' => 'Descripción de la categoría actualizada',
+        ];
+
+        $request = new Request($data);
+
+        // Simulamos que la validación falla debido a datos duplicados
+        $requestMock = Mockery::mock(Request::class);
+        $requestMock->shouldReceive('validate')
+            ->andThrow(
+                ValidationException::withMessages(['name' => ['El nombre ya existe.']])
+            );
+
+        $controller = new CategoryController();
+        $response = $controller->update($request, $category);
+
+        $this->assertEquals(422, $response->status());
+        //$this->assertEquals(['error' => 'Error al actualizar', 'messages' => ['name' => ['El nombre ya existe.']]], $response->getData(true));
     }
 
     /**

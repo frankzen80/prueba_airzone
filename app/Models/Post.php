@@ -23,8 +23,9 @@ class Post extends Model
     // Relacion (1:1): Indica que este modelo está asociado a un usuario específico de la table 'user'.
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class);
     }
+
 
     // Relación (1:N): Indica que este modelo puede tener muchos comentarios asociados.
     public function comments()
